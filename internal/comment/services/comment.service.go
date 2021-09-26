@@ -67,7 +67,14 @@ func (s *Service) UpdateComment(ID uint, newComment Entity.Comment) (Entity.Comm
 
 // DeleteComment - deletes a comment from the database by ID
 func (s *Service) DeleteComment(ID uint) error {
-	if result := s.DB.Delete(&Entity.Comment{}, ID); result.Error != nil {
+	var comment Entity.Comment
+
+	commentFound, err := s.GetComment(ID)
+	if err != nil {
+		return err
+	}
+
+	if result := s.DB.Delete(&comment, commentFound.ID); result.Error != nil {
 		return result.Error
 	}
 	return nil
