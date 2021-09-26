@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/internal/database"
 	transportHTTP "api/internal/transport/http"
 	"fmt"
 	"net/http"
@@ -13,6 +14,13 @@ type App struct {}
 // Run - sets up our application
 func (app *App) Run() error {
 	fmt.Println("Settings Up Our App")
+
+	var err error
+
+	_, err = database.NewDatabase()
+	if err != nil {
+		return err
+	}
 
 	handler := transportHTTP.NewHandler()
 	handler.SetupRoutes()
