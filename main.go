@@ -1,6 +1,7 @@
 package main
 
 import (
+	Comment "api/internal/comment/services"
 	"api/internal/database"
 	transportHTTP "api/internal/transport/http"
 	"fmt"
@@ -17,12 +18,14 @@ func (app *App) Run() error {
 
 	var err error
 
-	_, err = database.NewDatabase()
+	db, err := database.NewDatabase()
 	if err != nil {
 		return err
 	}
 
-	handler := transportHTTP.NewHandler()
+	commentService := Comment.NewService(db)
+
+	handler := transportHTTP.NewHandler(commentService)
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
