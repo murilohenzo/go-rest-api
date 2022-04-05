@@ -1,0 +1,7 @@
+time="2022-04-04T21:42:12-03:00" level=info msg="Settings Up Our App" func="main.(*App).Run" file="main.go:19"
+time="2022-04-04T21:51:22-03:00" level=info msg="Settings Up Our App" func="main.(*App).Run" file="main.go:19"
+time="2022-04-04T21:51:29-03:00" level=info msg=200 func="api/internal/transport/http.(*Handler).PostComment" file="handler.go:90"
+time="2022-04-04T21:59:28-03:00" level=info msg="Settings Up Our App" func="main.(*App).Run" file="main.go:19"
+time="2022-04-04T21:59:34-03:00" level=info msg="Created Comment - Status Code: 200" func="api/internal/transport/http.(*Handler).PostComment" file="handler.go:102"
+time="2022-04-04T21:59:55-03:00" level=info msg="Failed to decode JSON Body - Status Code: 400" func="api/internal/transport/http.(*Handler).PostComment" file="handler.go:86"
+time="2022-04-04T22:00:03-03:00" level=info msg="Created Comment - Status Code: 200" func="api/internal/transport/http.(*Handler).PostComment" file="handler.go:102"

@@ -4,17 +4,21 @@ import (
 	Comment "api/internal/comment/services"
 	"api/internal/database"
 	transportHTTP "api/internal/transport/http"
+	"api/pkg/logging"
 	"fmt"
 	"net/http"
 )
 
 // App - the struct which contains things like pointers
 // to database connections
-type App struct {}
+type App struct{}
 
 // Run - sets up our application
 func (app *App) Run() error {
-	fmt.Println("Settings Up Our App")
+	logger := logging.GetLogger()
+	logger.Info("Settings Up Our App")
+
+	fmt.Println("Listen: http://localhost:8080")
 
 	var err error
 	db, err := database.NewDatabase()
@@ -29,7 +33,7 @@ func (app *App) Run() error {
 
 	commentService := Comment.NewService(db)
 
-	handler := transportHTTP.NewHandler(commentService)
+	handler := transportHTTP.NewHandler(commentService, logger)
 	handler.SetupRoutes()
 
 	if err := http.ListenAndServe(":8080", handler.Router); err != nil {
@@ -41,6 +45,7 @@ func (app *App) Run() error {
 }
 
 func main() {
+	logging.Init()
 	fmt.Println("GO REST API")
 	var app App
 	if err := app.Run(); err != nil {
