@@ -3,6 +3,7 @@ package http
 import (
 	Entity "api/internal/comment/models"
 	Comment "api/internal/comment/services"
+	"api/pkg/logging"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -12,20 +13,22 @@ import (
 
 // Handler - stores pointer to our comments service
 type Handler struct {
-	Router *mux.Router
+	Router  *mux.Router
 	Service *Comment.Service
+	Logger  logging.Logger
 }
 
 // Response - an object to store response from our api
 type Response struct {
 	Message string
-	Error string
+	Error   string
 }
 
 // NewHandler - returns a pointer to Handler
-func NewHandler(service *Comment.Service) *Handler {
+func NewHandler(service *Comment.Service, logger logging.Logger) *Handler {
 	return &Handler{
 		Service: service,
+		Logger:  logger,
 	}
 }
 
@@ -80,17 +83,24 @@ func (h *Handler) PostComment(writer http.ResponseWriter, request *http.Request)
 	var comment Entity.Comment
 	if err := json.NewDecoder(request.Body).Decode(&comment); err != nil {
 		sendErrorResponse(writer, "Failed to decode JSON Body", err, http.StatusBadRequest)
+		h.Logger.Info(fmt.Sprintf("Failed to decode JSON Body - Status Code: %v", http.StatusBadRequest))
 		return
 	}
 
 	createdComment, err := h.Service.PostComment(comment)
 	if err != nil {
 		sendErrorResponse(writer, "Failed to post new comment", err, http.StatusBadRequest)
+		h.Logger.Info(fmt.Sprintf("Failed to post new comment - Status Code: %v", http.StatusBadRequest))
 		return
 	}
-	if err := sendOkResponse(writer, createdComment, http.StatusCreated); err != nil {
+
+	err = sendOkResponse(writer, createdComment, http.StatusCreated)
+	if err != nil {
+		h.Logger.Error(err)
 		panic(err)
 	}
+	h.Logger.Info(fmt.Sprintf("Created Comment - Status Code: %v", http.StatusOK))
+
 }
 
 // UpdateComment - updates a comment by ID with new comment info
@@ -156,7 +166,7 @@ func sendErrorResponse(writer http.ResponseWriter, message string, err error, st
 	writer.WriteHeader(statusCode)
 	if err := json.NewEncoder(writer).Encode(Response{
 		Message: message,
-		Error: err.Error(),
+		Error:   err.Error(),
 	}); err != nil {
 		panic(err)
 	}
