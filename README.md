@@ -1,23 +1,36 @@
 # go-rest-api
 
+## Overview
+
 ### BACKEND
-- Estudos sobre como criar uma REST-API utilizando Golang
--- A aplicacao foi modelada utilizando, camada de models e services.
--- Foi utilizado o *GORM*, ORM do Go  que uma biblioteca que que permite 
-   fazer uma relação dos objetos com os dados que os mesmos representam.
--- Foi utilizado *GORILLA/MUX* para criar as rotas da aplicacao
--- Foi utilizado tambem *GODOTENV* para referenciar as variaveis de ambiente da aplicacao
+This project delves into the creation of a RESTful API using Golang, focusing on structured design and best practices.
 
-### INFRA
-- Foi utilizado docker para criar um container com a imagem do postgres
-- Foi criado um arquivo de docker compose para facilitar a criacao do conteiner
+#### Application Structure
+- The application is meticulously structured with distinct layers, including models and services.
+- Utilization of *GORM*, a robust Go ORM library, facilitates seamless object-data mapping.
 
-- Linux
+#### Routing
+- *GORILLA/MUX* is employed for defining and managing the application's HTTP routes efficiently.
+
+#### Configuration
+- *GODOTENV* is incorporated to manage and reference essential application environment variables.
+
+### INFRASTRUCTURE
+The project incorporates Docker for containerization, streamlining the setup of a PostgreSQL container for the database.
+
+## Getting Started
+
+### Docker Setup
+- The provided docker-compose file simplifies the process of setting up the PostgreSQL container.
+
+#### Linux
 ```sh
-  docker compose up -d
+docker-compose up -d
 ```
-- Windows
 
+#### Windows
 ```sh
-  winpty docker compose up -d
+winpty docker-compose up -d
 ```
+
+These steps ensure a quick and consistent environment setup, enabling seamless development and deployment of the Golang REST API.
